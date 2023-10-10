@@ -16,4 +16,5 @@ Possibility to manage game configuration and saving game state.
 Number 9, tic-tac-toe game (unlimited board).
 
 ## Add details about technology, program language, and HW that will be used in next tasks.
-
+- HW Arduino Uno
+- Possibly QT C++ 
