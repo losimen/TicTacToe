@@ -1,17 +1,21 @@
+const { SerialPort } = require('serialport')
 
 
 function sayHi()
 {
-    const SerialPort = require('serialport');
-    const Readline = require('@serialport/parser-readline');
-    const port = new SerialPort('/dev/ttyACM0', { baudRate: 9600 });
-    const parser = port.pipe(new Readline({ delimiter: '\n' }));
 
-    port.on("open", () => {
-        console.log('serial port open');
-    });
-    parser.on('data', data =>{
-        console.log('got word from arduino:', data);
-    });
+// Встановлення параметрів порту
+    const port = new SerialPort({
+        path: '/dev/cu.wchusbserial140', // Шлях до порту
+        baudRate: 9600, // Швидкість обміну даними повинна бути такою ж, як і на Arduino
+    })
+
+// Обробник події для отримання даних
+    port.on('data', (data) => {
+        // data - це буфер, що містить отримані дані від Arduino
+        // Тут ви можете обробити ці дані, наприклад, перетворити їх у рядок:
+        const response = data.toString('utf-8')
+        console.log('Отримана відповідь від Arduino:', response)
+    })
 
 }
