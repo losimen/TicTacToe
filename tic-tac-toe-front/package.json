@@ -11,11 +11,13 @@
     "@tailwindcss/aspect-ratio": "^0.4.2",
     "@tailwindcss/forms": "^0.5.6",
     "@tailwindcss/typography": "^0.5.10",
+    "@vue/cli-plugin-typescript": "^5.0.8",
     "autoprefixer": "^10.4.16",
     "core-js": "^3.8.3",
     "postcss": "^8.4.31",
     "serialport": "^12.0.0",
     "tailwindcss": "^3.3.3",
+    "typescript": "^5.2.2",
     "vue": "^3.2.13",
     "vue-tailwind": "^2.5.1"
   },
@@ -47,5 +49,10 @@
     "last 2 versions",
     "not dead",
     "not ie 11"
-  ]
+  ],
+  "browser": {
+    "fs": false,
+    "path": false,
+    "os": false
+  }
 }
