@@ -1,59 +1,22 @@
 {
-  "name": "tic-tac-toe-front",
-  "version": "0.1.0",
+  "name": "vite-project",
   "private": true,
+  "version": "0.0.0",
+  "main": "main.js",
   "scripts": {
-    "serve": "vue-cli-service serve",
-    "build": "vue-cli-service build",
-    "lint": "vue-cli-service lint"
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "e-start": "electron ."
   },
   "dependencies": {
-    "@tailwindcss/aspect-ratio": "^0.4.2",
-    "@tailwindcss/forms": "^0.5.6",
-    "@tailwindcss/typography": "^0.5.10",
-    "@vue/cli-plugin-typescript": "^5.0.8",
-    "autoprefixer": "^10.4.16",
-    "browserify-fs": "^1.0.0",
-    "child_process": "^1.0.2",
-    "core-js": "^3.8.3",
-    "os-browserify": "^0.3.0",
-    "path-browserify": "^1.0.1",
-    "postcss": "^8.4.31",
+    "electron": "^27.0.0",
     "serialport": "^12.0.0",
-    "stream-browserify": "^3.0.0",
-    "tailwindcss": "^3.3.3",
-    "typescript": "^5.2.2",
-    "util": "^0.12.5",
-    "vue": "^3.2.13",
-    "vue-tailwind": "^2.5.1"
+    "tableify": "^1.1.1",
+    "vue": "^3.3.4"
   },
   "devDependencies": {
-    "@babel/core": "^7.12.16",
-    "@babel/eslint-parser": "^7.12.16",
-    "@vue/cli-plugin-babel": "~5.0.0",
-    "@vue/cli-plugin-eslint": "~5.0.0",
-    "@vue/cli-service": "~5.0.0",
-    "eslint": "^7.32.0",
-    "eslint-plugin-vue": "^8.0.3"
-  },
-  "eslintConfig": {
-    "root": true,
-    "env": {
-      "node": true
-    },
-    "extends": [
-      "plugin:vue/vue3-essential",
-      "eslint:recommended"
-    ],
-    "parserOptions": {
-      "parser": "@babel/eslint-parser"
-    },
-    "rules": {}
-  },
-  "browserslist": [
-    "> 1%",
-    "last 2 versions",
-    "not dead",
-    "not ie 11"
-  ]
+    "@vitejs/plugin-vue": "^4.4.0",
+    "vite": "^4.4.5"
+  }
 }

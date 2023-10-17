@@ -1,24 +1,10 @@
-# tic-tac-toe-front
+# How to start
 
-## Project setup
-```
-yarn install
-```
+## Dev
+`yarn dev`
 
-### Compiles and hot-reloads for development
-```
-yarn serve
-```
+## Build
+`yarn build`
 
-### Compiles and minifies for production
-```
-yarn build
-```
-
-### Lints and fixes files
-```
-yarn lint
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+## Start app
+`yarn e-start`
