@@ -1,5 +1,4 @@
 #include <Arduino.h>
-#include <TagWorker.h>
 
 void setup() 
 {
@@ -9,13 +8,6 @@ void setup()
 
 
 void loop() {
-
-  if (Serial.available())
-  {
-    TagWorker tagWorker(Serial.readString());
-    String response = tagWorker.getKeyValue("key");
-
-    Serial.println("log");
-    Serial.println(response);
-  }
+  Serial.println("log");
+  delay(1000);
 }
