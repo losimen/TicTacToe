@@ -1,5 +1,13 @@
 #include <Arduino.h>
 
+#include <errno.h>
+#include <inttypes.h>
+#include <stdio.h>
+#include <string.h>
+#include <sys/types.h>
+#include <stdlib.h>
+#include <limits.h>
+#include <inttypes.h>
 
 class TagWorker 
 {
