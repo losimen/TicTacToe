@@ -16,7 +16,7 @@
 import MarkSlot from "./components/MarkSlot.vue";
 import TurnIndicator from "./components/TurnIndicator.vue";
 import WinIndicator from "./components/WinIndicator.vue";
-// import {SerialPort} from "serialport";
+const { SerialPort } = require('serialport')
 
 function resetBoard() {
   this.board = [-1, -1, -1, -1, -1, -1, -1, -1, -1];
@@ -27,7 +27,9 @@ function resetBoard() {
 
 function onMarkSlotClick(id) {
   // Check if the game has ended or the slot has already been filled.
-  if ( this.isEnded || this.board[id] != '-1') { return }
+  if ( this.isEnded || this.board[id] !== -1) {
+    return
+  }
 
   // Converts the turn into the corresponding mark.
   // x = 0 | o = 1
@@ -36,11 +38,11 @@ function onMarkSlotClick(id) {
 
   // Win check for rows and columns
   for (let i = 0; i < 3; i++) {
-    if (this.board[0 + i*3] === mark
+    if (this.board[i * 3] === mark
       && this.board[1 + i*3] === mark
       && this.board[2 + i*3] === mark
       ||
-      this.board[0 + i] === mark
+      this.board[i] === mark
       && this.board[3 + i] === mark
       && this.board[6 + i] === mark) {
       this.isEnded = true;
@@ -88,23 +90,17 @@ export default {
     }
   },
   mounted() {
-    // console.log("Hello from main")
-    //
-    // async function listSerialPorts() {
-    //   await SerialPort.list().then((ports, err) => {
-    //     console.log("ports", ports)
-    //   })
-    // }
-    //
-    // const port = new SerialPort({
-    //   path: '/dev/tty.usbserial-1140', // Шлях до порту
-    //   baudRate: 9600,
-    // })
-    //
-    // port.on('data', (data) => {
-    //   const response = data.toString('utf-8')
-    //   console.log('Отримана відповідь від Arduino:', response)
-    // })
+    console.log("Hello from main")
+
+    const port = new SerialPort({
+      path: '/dev/tty.usbserial-140', // Шлях до порту
+      baudRate: 9600,
+    })
+
+    port.on('data', (data) => {
+      const response = data.toString()
+      console.log('Отримана відповідь від Arduino:', response)
+    })
   }
 }
 </script>
@@ -113,6 +109,7 @@ export default {
 <style>
 @font-face {
   font-family: "Iosevka Aile Lite";
+  /*noinspection CssInvalidPropertyValue*/
   src: "./assets/font/iosevka-aile-lite-regular.ttf"
 }
 
@@ -159,16 +156,8 @@ button {
   align-items: center;
   width: fit-content;
   border-radius: 0.2em;
-  margin: 0 auto;
-  margin-top: 60px;
+  margin: 60px auto 0;
   box-shadow: 0 0 30px rgba(0, 0, 0, 0.2);
-}
-
-.cont-ind {
-  font-size: 1.5rem;
-  display: flex;
-  align-items: center;
-  margin-bottom: 0.5em;
 }
 
 .cont-slot {
