@@ -19,6 +19,26 @@ import TurnIndicator from "./components/TurnIndicator.vue";
 import WinIndicator from "./components/WinIndicator.vue";
 const { SerialPort } = require('serialport')
 
+
+class ArduinoIO {
+  onReceiveData(data) {
+    const stringData = data.toString()
+    console.log('-Отримано дані від Arduino:', stringData)
+  }
+
+  onSendData(action, args) {
+    const data = {
+      sensor: action,
+    }
+
+    // data to string
+    const dataString = JSON.stringify(data)
+
+    port.write(dataString)
+  }
+}
+
+
 function onResetBoard() {
   this.board = [-1, -1, -1, -1, -1, -1, -1, -1, -1];
   this.turn = 0;
@@ -27,15 +47,7 @@ function onResetBoard() {
 }
 
 function onCheck() {
-
-  const data = {
-    sensor: 'resetBoard',
-  }
-
-  // data to string
-  const dataString = JSON.stringify(data)
-
-  port.write(dataString)
+  arduinoIO.onSendData('check-baby')
 }
 
 function onMarkSlotClick(id) {
@@ -88,6 +100,8 @@ let port = new SerialPort({
   baudRate: 9600,
 })
 
+const arduinoIO = new ArduinoIO()
+
 // function onReceiveData(data) {
 //   console.log('Отримано дані від Arduino:', data)
 // }
@@ -115,8 +129,7 @@ export default {
   },
   mounted() {
     port.on('data', (data) => {
-      const response = data.toString()
-      console.log('Отримана відповідь від Arduino:', response)
+      arduinoIO.onReceiveData(data)
     })
   }
 }
