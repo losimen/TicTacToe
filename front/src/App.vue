@@ -21,12 +21,42 @@ const { ReadlineParser } = require('serialport')
 const { SerialPort } = require('serialport')
 
 class ArduinoIO {
-  onReceiveData(data) {
-    console.log('-Отримано дані від Arduino:', data)
+  hasEndSymbol(data) {
+    return data.includes('^');
+  }
+
+  handleData() {
+    this.accumulatedData = this.accumulatedData.slice(0, -3)
+
+    console.log(this.accumulatedData)
+    const dataObj = JSON.parse(this.accumulatedData);
+    this.accumulatedData = ''
+
+    console.log(dataObj)
+    console.log(dataObj.board)
+    this.updateBoard(dataObj.board);
+  }
+
+  updateBoard(board) {
+    this.app.board = board
+  }
+
+  processData(newData) {
+    if (this.accumulatedData === undefined) {
+      this.accumulatedData = '';
+    }
+    this.accumulatedData += newData;
+
+    if (this.hasEndSymbol(this.accumulatedData)) {
+      this.handleData();
+    }
+  }
+
+  setApp(app) {
+    this.app = app
   }
 
   onSendData(action, args) {
-    console.log("send")
     const data = {
       action: action,
     }
@@ -79,10 +109,11 @@ export default {
     }
   },
   mounted() {
-    const parser = port.pipe(new ReadlineParser({ delimiter: '\n' }))
+    const parser = port.pipe(new ReadlineParser({ delimiter: "^" }))
+    arduinoIO.setApp(this)
 
-    parser.on('data', (data) => {
-      arduinoIO.onReceiveData(data)
+    port.on('data', (data) => {
+      arduinoIO.processData(data)
     })
   }
 }

@@ -18,10 +18,8 @@ void resetBoard()
   isTie = false;
 }
 
-void makeTurn()
+void makeTurn(int id)
 {
-  int id = 0;
-
   if (isEnded || board[turn] != -1)
   {
     return;
@@ -85,7 +83,7 @@ void loop() {
     }
     else if (action == "mark-slot")
     {
-      makeTurn();
+      makeTurn(doc["id"].as<int>());
     }
     else 
     {
@@ -95,7 +93,10 @@ void loop() {
 
     DynamicJsonDocument result(500);
 
-    // result["board"] = board;
+    for (int i = 0; i < 9; i++)
+    {
+      result["board"][i] = board[i];
+    }
     result["turn"] = turn;
     result["isEnded"] = isEnded;
     result["isTie"] = isTie;
@@ -104,7 +105,7 @@ void loop() {
     String ready;
     serializeJson(result, ready);
 
-    // ready += "\n";
+    ready += "^";
 
     Serial.println(ready);
   }
