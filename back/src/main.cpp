@@ -65,7 +65,7 @@ void makeTurn()
 
 void setup() 
 {
-  Serial.begin(9600);
+  Serial.begin(38400);
   Serial.setTimeout(50);
 }
 
@@ -74,10 +74,10 @@ void loop() {
 
   if (Serial.available() > 0) {
     String json = Serial.readStringUntil('\n');
-    DynamicJsonDocument doc(1024);
+    DynamicJsonDocument doc(500);
 
     deserializeJson(doc, json);
-    String action = doc["action"].as<String>(); // Fix: Convert to String
+    String action = doc["action"].as<String>();
 
     if (action == "reset-board")
     {
@@ -89,10 +89,25 @@ void loop() {
     }
     else 
     {
-      Serial.println("Invalid action");
+      // {"action": "hi"}
+      // Serial.println("Invalid action");
     }
 
-    Serial.println(action);
+    DynamicJsonDocument result(500);
+
+    // result["board"] = board;
+    result["turn"] = turn;
+    result["isEnded"] = isEnded;
+    result["isTie"] = isTie;
+
+    // serialize into a string
+    String ready;
+    serializeJson(result, ready);
+
+    // ready += "\n";
+
+    Serial.println(ready);
   }
-  delay(1000);
+
+  delay(100);
 }

@@ -17,15 +17,16 @@
 import MarkSlot from "./components/MarkSlot.vue";
 import TurnIndicator from "./components/TurnIndicator.vue";
 import WinIndicator from "./components/WinIndicator.vue";
+const { ReadlineParser } = require('serialport')
 const { SerialPort } = require('serialport')
 
 class ArduinoIO {
   onReceiveData(data) {
-    const stringData = data.toString()
-    // console.log('-Отримано дані від Arduino:', stringData)
+    console.log('-Отримано дані від Arduino:', data)
   }
 
   onSendData(action, args) {
+    console.log("send")
     const data = {
       action: action,
     }
@@ -47,17 +48,12 @@ function onCheck() {
 }
 
 function onMarkSlotClick(id) {
-  for (let i = 0; i < 9; i++) {
-    // random 0 or 1
-    this.board[i] = Math.floor(Math.random() * 2)
-  }
-
-  // arduinoIO.onSendData('mark-slot', {id: id})
+  arduinoIO.onSendData('mark-slot', {id: id})
 }
 
 let port = new SerialPort({
   path: '/dev/tty.usbserial-140',
-  baudRate: 9600,
+  baudRate: 38400,
 })
 
 const arduinoIO = new ArduinoIO()
@@ -83,7 +79,9 @@ export default {
     }
   },
   mounted() {
-    port.on('data', (data) => {
+    const parser = port.pipe(new ReadlineParser({ delimiter: '\n' }))
+
+    parser.on('data', (data) => {
       arduinoIO.onReceiveData(data)
     })
   }
