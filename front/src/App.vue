@@ -5,9 +5,9 @@
   <TurnIndicator v-show="!isEnded" :turnNum="turn"/>
   <WinIndicator v-show="isEnded" :turnNum="turn" :isTie="isTie"/>
   <div class="cont-slot">
-    <!-- Slots are 0 indexed -->
     <MarkSlot v-for="slotID in 9" :key="slotID - 1" @click="onMarkSlotClick(slotID - 1)" :turnNum="board[slotID - 1]"/>
   </div>
+
   <button id="btn-reset" @click="onResetBoard">Reset</button>
   <button id="btn-reset" @click="onCheck">Check</button>
 </template>
@@ -19,11 +19,10 @@ import TurnIndicator from "./components/TurnIndicator.vue";
 import WinIndicator from "./components/WinIndicator.vue";
 const { SerialPort } = require('serialport')
 
-
 class ArduinoIO {
   onReceiveData(data) {
     const stringData = data.toString()
-    console.log('-Отримано дані від Arduino:', stringData)
+    // console.log('-Отримано дані від Arduino:', stringData)
   }
 
   onSendData(action, args) {
@@ -31,11 +30,8 @@ class ArduinoIO {
       action: action,
     }
 
-    // merge args into data with one line
     Object.assign(data, args)
-
     const dataString = JSON.stringify(data)
-    console.log('-Відправлено дані до Arduino:', dataString)
 
     port.write(dataString)
   }
@@ -51,19 +47,20 @@ function onCheck() {
 }
 
 function onMarkSlotClick(id) {
-  arduinoIO.onSendData('mark-slot', {id: id})
+  for (let i = 0; i < 9; i++) {
+    // random 0 or 1
+    this.board[i] = Math.floor(Math.random() * 2)
+  }
+
+  // arduinoIO.onSendData('mark-slot', {id: id})
 }
 
 let port = new SerialPort({
-  path: '/dev/tty.usbserial-140', // Шлях до порту
+  path: '/dev/tty.usbserial-140',
   baudRate: 9600,
 })
 
 const arduinoIO = new ArduinoIO()
-
-// function onReceiveData(data) {
-//   console.log('Отримано дані від Arduino:', data)
-// }
 
 export default {
   name: "App",
@@ -76,7 +73,6 @@ export default {
     onResetBoard,
     onMarkSlotClick,
     onCheck
-    // onReceiveData
   },
   data() {
     return {
