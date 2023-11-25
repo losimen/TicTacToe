@@ -20,7 +20,7 @@ void resetBoard()
 
 void makeTurn(int id)
 {
-  if (isEnded || board[turn] != -1)
+  if (isEnded || board[id] != -1)
   {
     return;
   }
@@ -28,36 +28,7 @@ void makeTurn(int id)
   int mark = turn % 2;
   board[id] = mark;
 
-  for (int i = 0; i < 3; i++)
-  {
-    if (board[i * 3] == mark &&
-        board[1 + i * 3] == mark &&
-        board[2 + i * 3] == mark || board[i] == mark && 
-        board[3 + i] == mark && board[6 + i] == mark)
-    {
-      isEnded = true;
-    }
-  }
-
-  if (board[0] == mark && 
-      board[4] == mark && 
-      board[8] == mark || board[2] == mark &&
-       board[4] == mark && 
-       board[6] == mark)
-  {
-    isEnded = true;
-  }
-
-  else if (turn >= 8)
-  {
-    isEnded = true;
-    isTie = true;
-  }
-
-  else if (!isEnded)
-  {
-    turn += 1;
-  }
+  turn += 1;
 }
 
 
@@ -72,10 +43,10 @@ void loop() {
 
   if (Serial.available() > 0) {
     String json = Serial.readStringUntil('\n');
-    DynamicJsonDocument doc(500);
+    DynamicJsonDocument *doc = new DynamicJsonDocument(700);
 
-    deserializeJson(doc, json);
-    String action = doc["action"].as<String>();
+    deserializeJson(*doc, json);
+    String action = (*doc)["action"].as<String>();
 
     if (action == "reset-board")
     {
@@ -83,7 +54,7 @@ void loop() {
     }
     else if (action == "mark-slot")
     {
-      makeTurn(doc["id"].as<int>());
+      makeTurn((*doc)["id"].as<int>());
     }
     else 
     {
@@ -91,19 +62,21 @@ void loop() {
       // Serial.println("Invalid action");
     }
 
-    DynamicJsonDocument result(500);
+    delete doc;
+    DynamicJsonDocument *result = new DynamicJsonDocument(700);
 
     for (int i = 0; i < 9; i++)
     {
-      result["board"][i] = board[i];
+      (*result)["board"][i] = board[i];
     }
-    result["turn"] = turn;
-    result["isEnded"] = isEnded;
-    result["isTie"] = isTie;
+    (*result)["turn"] = turn;
+    (*result)["isEnded"] = isEnded;
+    (*result)["isTie"] = isTie;
 
-    // serialize into a string
     String ready;
-    serializeJson(result, ready);
+    serializeJson((*result), ready);
+
+    delete result;
 
     ready += "^";
 
