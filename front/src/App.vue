@@ -28,11 +28,14 @@ class ArduinoIO {
 
   onSendData(action, args) {
     const data = {
-      sensor: action,
+      action: action,
     }
 
-    // data to string
+    // merge args into data with one line
+    Object.assign(data, args)
+
     const dataString = JSON.stringify(data)
+    console.log('-Відправлено дані до Arduino:', dataString)
 
     port.write(dataString)
   }
@@ -40,10 +43,7 @@ class ArduinoIO {
 
 
 function onResetBoard() {
-  this.board = [-1, -1, -1, -1, -1, -1, -1, -1, -1];
-  this.turn = 0;
-  this.isEnded = false;
-  this.isTie = false;
+  arduinoIO.onSendData('reset-board')
 }
 
 function onCheck() {
@@ -51,48 +51,7 @@ function onCheck() {
 }
 
 function onMarkSlotClick(id) {
-  // Check if the game has ended or the slot has already been filled.
-  if ( this.isEnded || this.board[id] !== -1) {
-    return
-  }
-
-  // Converts the turn into the corresponding mark.
-  // x = 0 | o = 1
-  let mark = this.turn % 2;
-  this.board[id] = mark;
-
-  // Win check for rows and columns
-  for (let i = 0; i < 3; i++) {
-    if (this.board[i * 3] === mark
-      && this.board[1 + i*3] === mark
-      && this.board[2 + i*3] === mark
-      ||
-      this.board[i] === mark
-      && this.board[3 + i] === mark
-      && this.board[6 + i] === mark) {
-      this.isEnded = true;
-    }
-  }
-  // Win check for diagonals
-  if (this.board[0] === mark
-    && this.board[4] === mark
-    && this.board[8] === mark
-    ||
-    this.board[2] === mark
-    && this.board[4] === mark
-    && this.board[6] === mark
-  ) {
-    this.isEnded = true;
-  }
-  // Tie check
-  else if ( this.turn >= 8 ) {
-    this.isEnded = true;
-    this.isTie = true;
-  }
-  // Continue to next turn
-  else if (!this.isEnded){
-    this.turn += 1;
-  }
+  arduinoIO.onSendData('mark-slot', {id: id})
 }
 
 let port = new SerialPort({

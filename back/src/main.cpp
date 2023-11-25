@@ -18,6 +18,49 @@ void resetBoard()
   isTie = false;
 }
 
+void makeTurn()
+{
+  int id = 0;
+
+  if (isEnded || board[turn] != -1)
+  {
+    return;
+  }
+
+  int mark = turn % 2;
+  board[id] = mark;
+
+  for (int i = 0; i < 3; i++)
+  {
+    if (board[i * 3] == mark &&
+        board[1 + i * 3] == mark &&
+        board[2 + i * 3] == mark || board[i] == mark && 
+        board[3 + i] == mark && board[6 + i] == mark)
+    {
+      isEnded = true;
+    }
+  }
+
+  if (board[0] == mark && 
+      board[4] == mark && 
+      board[8] == mark || board[2] == mark &&
+       board[4] == mark && 
+       board[6] == mark)
+  {
+    isEnded = true;
+  }
+
+  else if (turn >= 8)
+  {
+    isEnded = true;
+    isTie = true;
+  }
+
+  else if (!isEnded)
+  {
+    turn += 1;
+  }
+}
 
 
 void setup() 
@@ -34,9 +77,22 @@ void loop() {
     DynamicJsonDocument doc(1024);
 
     deserializeJson(doc, json);
-    const char* sensor = doc["sensor"];
-    
-    Serial.println(sensor);
+    String action = doc["action"].as<String>(); // Fix: Convert to String
+
+    if (action == "reset-board")
+    {
+      resetBoard();
+    }
+    else if (action == "mark-slot")
+    {
+      makeTurn();
+    }
+    else 
+    {
+      Serial.println("Invalid action");
+    }
+
+    Serial.println(action);
   }
   delay(1000);
 }
