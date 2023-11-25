@@ -8,7 +8,8 @@
     <!-- Slots are 0 indexed -->
     <MarkSlot v-for="slotID in 9" :key="slotID - 1" @click="onMarkSlotClick(slotID - 1)" :turnNum="board[slotID - 1]"/>
   </div>
-  <button id="btn-reset" @click="resetBoard">Reset</button>
+  <button id="btn-reset" @click="onResetBoard">Reset</button>
+  <button id="btn-reset" @click="onCheck">Check</button>
 </template>
 
 
@@ -18,11 +19,23 @@ import TurnIndicator from "./components/TurnIndicator.vue";
 import WinIndicator from "./components/WinIndicator.vue";
 const { SerialPort } = require('serialport')
 
-function resetBoard() {
+function onResetBoard() {
   this.board = [-1, -1, -1, -1, -1, -1, -1, -1, -1];
   this.turn = 0;
   this.isEnded = false;
   this.isTie = false;
+}
+
+function onCheck() {
+
+  const data = {
+    sensor: 'resetBoard',
+  }
+
+  // data to string
+  const dataString = JSON.stringify(data)
+
+  port.write(dataString)
 }
 
 function onMarkSlotClick(id) {
@@ -70,6 +83,15 @@ function onMarkSlotClick(id) {
   }
 }
 
+let port = new SerialPort({
+  path: '/dev/tty.usbserial-140', // Шлях до порту
+  baudRate: 9600,
+})
+
+// function onReceiveData(data) {
+//   console.log('Отримано дані від Arduino:', data)
+// }
+
 export default {
   name: "App",
   components: {
@@ -78,25 +100,20 @@ export default {
     WinIndicator
   },
   methods: {
-    resetBoard,
-    onMarkSlotClick
+    onResetBoard,
+    onMarkSlotClick,
+    onCheck
+    // onReceiveData
   },
   data() {
     return {
       turn: 0,
       board: [-1, -1, -1, -1, -1, -1, -1, -1, -1],
       isEnded: false,
-      isTie: false
+      isTie: false,
     }
   },
   mounted() {
-    console.log("Hello from main")
-
-    const port = new SerialPort({
-      path: '/dev/tty.usbserial-140', // Шлях до порту
-      baudRate: 9600,
-    })
-
     port.on('data', (data) => {
       const response = data.toString()
       console.log('Отримана відповідь від Arduino:', response)
