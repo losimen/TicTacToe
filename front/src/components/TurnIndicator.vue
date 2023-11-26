@@ -1,8 +1,12 @@
 <template>
 	<div class="turn-ind">
-		<div class="mark-x" :class="{active: turnNum % 2 === 0}"><font-awesome-icon icon="fa-solid fa-x" /></div>
+		<div class="mark-x" :class="{active: turnNum % 2 === 0}">
+      <font-awesome-icon icon="fa-solid fa-x" />
+    </div>
 		<div class="text">TURN</div>
-		<div class="mark-o" :class="{active: turnNum % 2 === 1}"><font-awesome-icon icon="fa-solid fa-o" /></div>
+		<div class="mark-o" :class="{active: turnNum % 2 === 1}">
+      <font-awesome-icon icon="fa-solid fa-o" />
+    </div>
 	</div>
 </template>
 

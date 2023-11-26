@@ -17,57 +17,8 @@
 import MarkSlot from "./components/MarkSlot.vue";
 import TurnIndicator from "./components/TurnIndicator.vue";
 import WinIndicator from "./components/WinIndicator.vue";
-const { ReadlineParser } = require('serialport')
 const { SerialPort } = require('serialport')
-
-class ArduinoIO {
-  hasEndSymbol(data) {
-    return data.includes('^');
-  }
-
-  handleData() {
-    this.accumulatedData = this.accumulatedData.slice(0, -3)
-
-    const dataObj = JSON.parse(this.accumulatedData)
-    this.accumulatedData = ''
-
-    this.updateGameData(dataObj);
-  }
-
-  updateGameData(dataObj) {
-    this.app.board = dataObj.board
-    this.app.turn = dataObj.turn
-    this.app.isEnded = dataObj.isEnded
-    this.app.isTie = dataObj.isTie
-  }
-
-  processData(newData) {
-    if (this.accumulatedData === undefined) {
-      this.accumulatedData = '';
-    }
-    this.accumulatedData += newData;
-
-    if (this.hasEndSymbol(this.accumulatedData)) {
-      this.handleData();
-    }
-  }
-
-  setApp(app) {
-    this.app = app
-  }
-
-  onSendData(action, args) {
-    const data = {
-      action: action,
-    }
-
-    Object.assign(data, args)
-    const dataString = JSON.stringify(data)
-
-    port.write(dataString)
-  }
-}
-
+import ArduinoIO from './services/io/ArduinoIO'
 
 function onResetBoard() {
   arduinoIO.onSendData('reset-board')
@@ -109,12 +60,12 @@ export default {
     }
   },
   mounted() {
-    const parser = port.pipe(new ReadlineParser({ delimiter: "^" }))
-    arduinoIO.setApp(this)
-
     port.on('data', (data) => {
       arduinoIO.processData(data)
     })
+
+    arduinoIO.setApp(this)
+    arduinoIO.setPort(port)
   }
 }
 </script>
