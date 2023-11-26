@@ -25,20 +25,21 @@ void Game::makeTurn(int id)
 
   for (int i = 0; i < 3; i++)
   {
-    if (board[i * 3] == mark &&
-        board[1 + i * 3] == mark &&
-        board[2 + i * 3] == mark || board[i] == mark && 
-        board[3 + i] == mark && board[6 + i] == mark)
+    if (
+      (board[i * 3] == mark &&
+       board[1 + i * 3] == mark &&
+       board[2 + i * 3] == mark) || 
+      (board[i] == mark && 
+      board[3 + i] == mark &&
+      board[6 + i] == mark)
+    )
     {
       isEnded = true;
     }
   }
 
-  if (board[0] == mark && 
-      board[4] == mark && 
-      board[8] == mark || board[2] == mark &&
-       board[4] == mark && 
-       board[6] == mark)
+  if ((board[0] == mark && board[4] == mark && board[8] == mark) || 
+      (board[2] == mark && board[4] == mark && board[6] == mark))
   {
     isEnded = true;
   }
