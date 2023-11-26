@@ -1,8 +1,12 @@
 <template>
 	<div>
 		<div class="cont-ind" v-show="!isTie">
-			<div class="mark-x"><fa-icon v-show="turnNum % 2 === 0" icon="fa-solid fa-x" /></div>
-			<div class="mark-o"><fa-icon v-show="turnNum % 2 === 1" icon="fa-regular fa-circle" /></div>
+			<div class="mark-x">
+        <font-awesome-icon v-show="turnNum % 2 === 0" icon="fa-solid fa-x" />
+      </div>
+			<div class="mark-o">
+        <font-awesome-icon v-show="turnNum % 2 === 1" icon="fa-solid fa-o" />
+      </div>
 			<div>WINS</div>
 		</div>
 		<div class="cont-ind" v-show="isTie">

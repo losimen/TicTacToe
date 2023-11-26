@@ -1,7 +1,7 @@
 <template>
   <button @click="onClickMy" :style="{'background-color': bgColor}">
-    <fa-icon v-show="mark === 0" icon="solid x"/>
-    <fa-icon v-show="mark === 1" icon="regular circle"/>
+    <font-awesome-icon v-show="mark === 0" icon="fa-solid fa-x"/>
+    <font-awesome-icon v-show="mark === 1" icon="fa-solid fa-o"/>
   </button>
 </template>
 

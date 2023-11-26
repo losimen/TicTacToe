@@ -28,8 +28,7 @@ class ArduinoIO {
   handleData() {
     this.accumulatedData = this.accumulatedData.slice(0, -3)
 
-    console.log(this.accumulatedData)
-    const dataObj = JSON.parse(this.accumulatedData);
+    const dataObj = JSON.parse(this.accumulatedData)
     this.accumulatedData = ''
 
     this.updateGameData(dataObj);
