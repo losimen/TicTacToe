@@ -1,5 +1,5 @@
 <template>
-  <button @click="onClickMy" :style="{'background-color': bgColor}">
+  <button :style="{'background-color': bgColor}">
     <font-awesome-icon v-show="mark === 0" icon="fa-solid fa-x"/>
     <font-awesome-icon v-show="mark === 1" icon="fa-solid fa-o"/>
   </button>
@@ -32,11 +32,6 @@ export default {
     return {
       mark: -1,
       bgColor: "var(--clr-faded)"
-    }
-  },
-  methods: {
-    onClickMy() {
-      console.log("clicked");
     }
   }
 }

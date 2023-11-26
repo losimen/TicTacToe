@@ -4,8 +4,7 @@ export default class ArduinoIO {
   }
 
   handleData() {
-    this.accumulatedData = this.accumulatedData.slice(0, -3)
-
+    this.accumulatedData = this.accumulatedData.slice(0, this.accumulatedData.lastIndexOf('}') + 1)
     const dataObj = JSON.parse(this.accumulatedData)
     this.accumulatedData = ''
 
@@ -17,6 +16,11 @@ export default class ArduinoIO {
     this.app.turn = dataObj.turn
     this.app.isEnded = dataObj.isEnded
     this.app.isTie = dataObj.isTie
+
+    if (dataObj.status !== 'success') {
+      const errorMessage = dataObj.status.slice(dataObj.status.indexOf(':') + 2)
+      this.app.showError(errorMessage)
+    }
   }
 
   processData(newData) {

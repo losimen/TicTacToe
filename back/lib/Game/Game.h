@@ -1,3 +1,5 @@
+#include <Arduino.h>
+
 class Game
 {
 public:
@@ -7,7 +9,7 @@ public:
     bool isEnded = false;
     bool isTie = false;
 
-    void resetBoard();
+    String resetBoard();
 
-    void makeTurn(int id);
+    String makeTurn(int id);
 };

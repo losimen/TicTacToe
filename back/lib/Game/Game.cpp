@@ -1,6 +1,6 @@
 #include "Game.h"
 
-void Game::resetBoard()
+String Game::resetBoard()
 {
     for (int i = 0; i < 9; i++)
     {
@@ -10,14 +10,21 @@ void Game::resetBoard()
     turn = 0;
     isEnded = false;
     isTie = false;
+
+    return "success";
 }
 
 
-void Game::makeTurn(int id)
+String Game::makeTurn(int id)
 {
-  if (isEnded || board[id] != -1)
+  if (isEnded)
   {
-    return;
+    return "error: game is ended";
+  }
+
+  if (board[id] != -1)
+  {
+    return "error: invalid move";
   }
 
   int mark = turn % 2;
@@ -54,4 +61,6 @@ void Game::makeTurn(int id)
   {
     turn += 1;
   }
+
+  return "success";
 }

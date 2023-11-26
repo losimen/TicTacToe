@@ -12,7 +12,8 @@ void setup()
 
 void loop() {
 
-  if (Serial.available() > 0) {
+  if (Serial.available() > 0) 
+  {
     String result = pool.accept(Serial.readStringUntil('^'));
     Serial.println(result);
   }

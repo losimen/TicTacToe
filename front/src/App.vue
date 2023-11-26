@@ -2,14 +2,16 @@
   <header>
     <h1>TIC-TAC-TOE</h1>
   </header>
+
   <TurnIndicator v-show="!isEnded" :turnNum="turn"/>
   <WinIndicator v-show="isEnded" :turnNum="turn" :isTie="isTie"/>
+
   <div class="cont-slot">
     <MarkSlot v-for="slotID in 9" :key="slotID - 1" @click="onMarkSlotClick(slotID - 1)" :turnNum="board[slotID - 1]"/>
   </div>
 
   <button id="btn-reset" @click="onResetBoard">Reset</button>
-  <button id="btn-reset" @click="onCheck">Check</button>
+<!--  <button id="btn-reset" @click="showToast">Check</button>-->
 </template>
 
 
@@ -20,13 +22,15 @@ import WinIndicator from "./components/WinIndicator.vue";
 const { SerialPort } = require('serialport')
 import ArduinoIO from './services/io/ArduinoIO'
 
+import { useToast } from "vue-toastification";
+
 function onResetBoard() {
   arduinoIO.onSendData('reset-board')
 }
 
-function onCheck() {
-  arduinoIO.onSendData('check-baby')
-}
+// function onCheck() {
+//   arduinoIO.onSendData('check-baby')
+// }
 
 function onMarkSlotClick(id) {
   arduinoIO.onSendData('mark-slot', {id: id})
@@ -49,7 +53,15 @@ export default {
   methods: {
     onResetBoard,
     onMarkSlotClick,
-    onCheck
+    // onCheck,
+    showError(message) {
+      this.toast.error(message)
+    }
+  },
+  setup() {
+    const toast = useToast();
+
+    return { toast }
   },
   data() {
     return {
