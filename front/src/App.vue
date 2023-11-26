@@ -32,13 +32,14 @@ class ArduinoIO {
     const dataObj = JSON.parse(this.accumulatedData);
     this.accumulatedData = ''
 
-    console.log(dataObj)
-    console.log(dataObj.board)
-    this.updateBoard(dataObj.board);
+    this.updateGameData(dataObj);
   }
 
-  updateBoard(board) {
-    this.app.board = board
+  updateGameData(dataObj) {
+    this.app.board = dataObj.board
+    this.app.turn = dataObj.turn
+    this.app.isEnded = dataObj.isEnded
+    this.app.isTie = dataObj.isTie
   }
 
   processData(newData) {
