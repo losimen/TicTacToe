@@ -3,14 +3,17 @@
     <h1>TIC-TAC-TOE</h1>
   </header>
 
-  <TurnIndicator v-show="!isEnded" :turnNum="turn"/>
-  <WinIndicator v-show="isEnded" :turnNum="turn" :isTie="isTie"/>
+  <LoadingSpinner v-if="isLoading"/>
+  <div v-else>
+    <TurnIndicator v-show="!isEnded" :turnNum="turn"/>
+    <WinIndicator v-show="isEnded" :turnNum="turn" :isTie="isTie"/>
 
-  <div class="cont-slot">
-    <MarkSlot v-for="slotID in 9" :key="slotID - 1" @click="onMarkSlotClick(slotID - 1)" :turnNum="board[slotID - 1]"/>
+    <div class="cont-slot">
+      <MarkSlot v-for="slotID in 9" :key="slotID - 1" @click="onMarkSlotClick(slotID - 1)" :turnNum="board[slotID - 1]"/>
+    </div>
+
+    <button id="btn-reset" @click="onResetBoard">Reset</button>
   </div>
-
-  <button id="btn-reset" @click="onResetBoard">Reset</button>
 <!--  <button id="btn-reset" @click="showToast">Check</button>-->
 </template>
 
@@ -23,6 +26,7 @@ const { SerialPort } = require('serialport')
 import ArduinoIO from './services/io/ArduinoIO'
 
 import { useToast } from "vue-toastification";
+import LoadingSpinner from "./components/LoadingSpinner.vue";
 
 function onResetBoard() {
   arduinoIO.onSendData('reset-board')
@@ -37,7 +41,7 @@ function onMarkSlotClick(id) {
 }
 
 let port = new SerialPort({
-  path: '/dev/tty.usbserial-140',
+  path: '/dev/tty.usbserial-1140',
   baudRate: 38400,
 })
 
@@ -46,6 +50,7 @@ const arduinoIO = new ArduinoIO()
 export default {
   name: "App",
   components: {
+    LoadingSpinner,
     MarkSlot,
     TurnIndicator,
     WinIndicator
@@ -69,12 +74,18 @@ export default {
       board: [-1, -1, -1, -1, -1, -1, -1, -1, -1],
       isEnded: false,
       isTie: false,
+      isLoading: true,
     }
   },
   mounted() {
     port.on('data', (data) => {
       arduinoIO.processData(data)
     })
+
+    setTimeout(() => {
+      this.isLoading = false
+    }, 2000)
+
 
     arduinoIO.setApp(this)
     arduinoIO.setPort(port)
