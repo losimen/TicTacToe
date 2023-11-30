@@ -45,7 +45,7 @@ function onResetBoard() {
 
 function onGameModeChange() {
   this.gameMode = Number(this.gameMode)
-  arduinoIO.onSendData('change-game-mode', {mode: this.gameMode})
+  arduinoIO.onSendData('change-game-mode', {gameMode: this.gameMode})
 }
 
 // function onCheck() {
@@ -65,6 +65,23 @@ function updateGameData(dataObj)
   this.turn = dataObj.turn
   this.isEnded = dataObj.isEnded
   this.isTie = dataObj.isTie
+
+  if (this.isEnded || this.isTie)
+  {
+    console.log('game ended')
+    return
+  }
+
+  if (this.gameMode === 1 && this.turn % 2 === 1)
+  {
+    console.log('ai move')
+    arduinoIO.onSendData('ai-move')
+  }
+  else if (this.gameMode === 2)
+  {
+    console.log('ai move')
+    arduinoIO.onSendData('ai-move')
+  }
 
   if (dataObj.status !== 'success') {
     const errorMessage = dataObj.status.slice(dataObj.status.indexOf(':') + 2)

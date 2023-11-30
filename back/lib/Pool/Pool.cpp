@@ -14,6 +14,7 @@ String Pool::accept(String json)
     deserializeJson(*doc, json);
     String action = (*doc)["action"].as<String>();
     String status = "unknown";
+
     if (action == "reset-board")
     {
         status = game.resetBoard();
@@ -21,7 +22,13 @@ String Pool::accept(String json)
     else if (action == "change-game-mode")
     {
         game.gameMode = (GameMode)(*doc)["gameMode"].as<int>();
+        status = "success";
     }
+    else if (action == "ai-move")
+    {
+        status = game.makeAITurn();
+    }
+    
     else if (action == "mark-slot")
     {
         status = game.makeHumanTurn((*doc)["id"].as<int>());
