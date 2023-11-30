@@ -10,10 +10,14 @@ enum GameMode
 class Game
 {
 protected:
-    void checkWin(int mark);
+    void determineGameEnd(int mark);
+    bool checkWin(int mark);
+    int minimax(bool isMaximizing);
+    int findBestMove();
 
 public:
     int board[9] = {-1, -1, -1, -1, -1, -1, -1, -1, -1};
+    int boardCopy[9] = {-1, -1, -1, -1, -1, -1, -1, -1, -1};
     int turn = 0;
     bool isEnded = false;
     bool isTie = false;

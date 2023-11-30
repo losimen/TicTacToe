@@ -1,4 +1,5 @@
 #include "Game.h"
+#include <limits.h>
 
 String Game::resetBoard()
 {
@@ -26,32 +27,109 @@ void Game::restoreBoard(int board[9], bool isEnded, bool isTie)
     this->isTie = isTie;
 }
 
-String Game::makeAITurn()
+
+int Game::minimax(bool isMaximizing)
 {
-  if (isEnded)
-  {
-    return "error: game is ended";
-  }
+    int score;
 
-  int mark = turn % 2;
-  int bestMove = -1;
+    if (checkWin(1))
+    {
+        score = 1;
+    }
+    else if (checkWin(0))
+    {
+        score = -1;
+    }
+    else if (turn >= 8)
+    {
+        score = 0;
+    }
+    else
+    {
+        int bestScore = isMaximizing ? INT_MIN : INT_MAX;
 
-  while (true)
-  {
-    bestMove = random(0, 9);
+        for (int i = 0; i < 9; i++)
+        {
+            if (boardCopy[i] == -1)
+            {
+                boardCopy[i] = isMaximizing ? 1 : 0;
+                turn++;
 
-    if (board[bestMove] == -1)
-      break;
-  }
-  board[bestMove] = mark;
+                int currentScore = minimax(!isMaximizing);
 
-  checkWin(mark);
+                boardCopy[i] = -1;
+                turn--;
 
-  return "success";
+                if ((isMaximizing && currentScore > bestScore) || (!isMaximizing && currentScore < bestScore))
+                {
+                    bestScore = currentScore;
+                }
+            }
+        }
+
+        score = bestScore;
+    }
+
+    return score;
+}
+
+int Game::findBestMove()
+{
+    int bestMove = -1;
+    int bestScore = INT_MIN;
+
+    for (int i = 0; i < 9; i++)
+    {
+        if (boardCopy[i] == -1)
+        {
+            boardCopy[i] = 1;
+            turn++;
+
+            int currentScore = minimax(false);
+
+            boardCopy[i] = -1;
+            turn--;
+
+            if (currentScore > bestScore)
+            {
+                bestScore = currentScore;
+                bestMove = i;
+            }
+        }
+    }
+
+    return bestMove;
 }
 
 
-void Game::checkWin(int mark)
+String Game::makeAITurn()
+{
+    if (isEnded)
+    {
+        return "error: game is ended";
+    }
+
+    for (int i = 0; i < 9; i++)
+    {
+        boardCopy[i] = board[i];
+    }
+
+    // Find the best move using Minimax
+    int bestMove = findBestMove();
+
+    // Make the AI move
+    int mark = turn % 2;
+    board[bestMove] = mark;
+
+    // Check if the game has ended
+    determineGameEnd(mark);
+
+    return "success";
+}
+
+
+
+bool Game::checkWin(int mark)
 {
   for (int i = 0; i < 3; i++)
   {
@@ -64,12 +142,23 @@ void Game::checkWin(int mark)
       board[6 + i] == mark)
     )
     {
-      isEnded = true;
+      return true;
     }
   }
 
   if ((board[0] == mark && board[4] == mark && board[8] == mark) || 
       (board[2] == mark && board[4] == mark && board[6] == mark))
+  {
+    return true;
+  }
+
+  return false;
+}
+
+
+void Game::determineGameEnd(int mark)
+{
+  if (checkWin(mark))
   {
     isEnded = true;
   }
@@ -102,7 +191,7 @@ String Game::makeHumanTurn(int id)
   int mark = turn % 2;
   board[id] = mark;
 
-  checkWin(mark);
+  determineGameEnd(mark);
 
   return "success";
 }
