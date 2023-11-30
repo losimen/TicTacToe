@@ -68,18 +68,15 @@ function updateGameData(dataObj)
 
   if (this.isEnded || this.isTie)
   {
-    console.log('game ended')
     return
   }
 
   if (this.gameMode === 1 && this.turn % 2 === 1)
   {
-    console.log('ai move')
     arduinoIO.onSendData('ai-move')
   }
   else if (this.gameMode === 2)
   {
-    console.log('ai move')
     arduinoIO.onSendData('ai-move')
   }
 
