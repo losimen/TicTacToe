@@ -12,18 +12,7 @@ export default class ArduinoIO {
   }
 
   updateGameData(dataObj) {
-    console.log(dataObj)
-
-    this.app.gameMode = dataObj.gameMode
-    this.app.board = dataObj.board
-    this.app.turn = dataObj.turn
-    this.app.isEnded = dataObj.isEnded
-    this.app.isTie = dataObj.isTie
-
-    if (dataObj.status !== 'success') {
-      const errorMessage = dataObj.status.slice(dataObj.status.indexOf(':') + 2)
-      this.app.showError(errorMessage)
-    }
+    this.app.updateGameData(dataObj)
   }
 
   processData(newData) {

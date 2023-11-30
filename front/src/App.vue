@@ -56,6 +56,22 @@ function onMarkSlotClick(id) {
   arduinoIO.onSendData('mark-slot', {id: id})
 }
 
+function updateGameData(dataObj)
+{
+  console.log(dataObj)
+
+  this.gameMode = dataObj.gameMode
+  this.board = dataObj.board
+  this.turn = dataObj.turn
+  this.isEnded = dataObj.isEnded
+  this.isTie = dataObj.isTie
+
+  if (dataObj.status !== 'success') {
+    const errorMessage = dataObj.status.slice(dataObj.status.indexOf(':') + 2)
+    this.toast.error(errorMessage)
+  }
+}
+
 let port = new SerialPort({
   path: '/dev/tty.usbserial-1140',
   baudRate: 38400,
@@ -74,11 +90,8 @@ export default {
   methods: {
     onResetBoard,
     onMarkSlotClick,
-    // onCheck,
-    showError(message) {
-      this.toast.error(message)
-    },
-    onGameModeChange
+    onGameModeChange,
+    updateGameData
   },
   setup() {
     const toast = useToast();
@@ -92,7 +105,8 @@ export default {
       isEnded: false,
       isTie: false,
       isLoading: true,
-      gameMode: 0
+      gameMode: 0,
+      toast: null
     }
   },
   mounted() {

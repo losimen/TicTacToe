@@ -34,26 +34,15 @@ String Game::makeAITurn()
   }
 
   int mark = turn % 2;
-  int bestScore = -1000;
   int bestMove = -1;
 
-  for (int i = 0; i < 9; i++)
+  while (true)
   {
-    if (board[i] == -1)
-    {
-      board[i] = mark;
-      // int score = minimax(board, 0, false);
-      int score = 0;
-      board[i] = -1;
+    bestMove = random(0, 9);
 
-      if (score > bestScore)
-      {
-        bestScore = score;
-        bestMove = i;
-      }
-    }
+    if (board[bestMove] == -1)
+      break;
   }
-
   board[bestMove] = mark;
 
   checkWin(mark);

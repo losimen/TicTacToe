@@ -11,7 +11,7 @@ public:
         // Additional setup if needed
     }
 
-    void writeBoard(int board[9], bool isEnded, bool isTie)
+    void writeBoard(int board[9], bool isEnded, bool isTie, int turn)
     {
         for (int i = 0; i < BOARD_LENGTH; i++)
         {
@@ -22,9 +22,10 @@ public:
 
         EEPROM.put(END_BOARD_ADDRESS, isEnded);
         EEPROM.put(END_BOARD_ADDRESS + sizeof(bool), isTie);
+        EEPROM.put(END_BOARD_ADDRESS + sizeof(bool) * 2, turn);
     }
 
-    void readBoard(int board[9], bool &isEnded, bool &isTie)
+    void readBoard(int board[9], bool &isEnded, bool &isTie, int &turn)
     {
         for (int i = 0; i < BOARD_LENGTH; i++)
         {
@@ -35,5 +36,6 @@ public:
 
         EEPROM.get(END_BOARD_ADDRESS, isEnded);
         EEPROM.get(END_BOARD_ADDRESS + sizeof(bool), isTie);
+        EEPROM.get(END_BOARD_ADDRESS + sizeof(bool) * 2, turn);
     }
 };

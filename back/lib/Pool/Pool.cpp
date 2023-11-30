@@ -4,12 +4,7 @@
 
 void Pool::restoreFromStorage()
 {
-    int board[9];
-    bool isEnded;
-    bool isTie;
-
-    storage.readBoard(board, isEnded, isTie);
-    game.restoreBoard(board, isEnded, isTie);
+    storage.readBoard(game.board, game.isEnded, game.isTie, game.turn);
 }
 
 String Pool::accept(String json)
@@ -56,7 +51,7 @@ String Pool::accept(String json)
     (*jsonResult)["isEnded"] = game.isEnded;
     (*jsonResult)["isTie"] = game.isTie;
 
-    storage.writeBoard(game.board, game.isEnded, game.isTie);
+    storage.writeBoard(game.board, game.isEnded, game.isTie, game.turn);
 
     String stringResult;
     serializeJson((*jsonResult), stringResult);
