@@ -23,6 +23,10 @@ String Pool::accept(String json)
     {
         status = game.resetBoard();
     }
+    else if (action == "change-game-mode")
+    {
+        game.gameMode = (GameMode)(*doc)["gameMode"].as<int>();
+    }
     else if (action == "mark-slot")
     {
         status = game.makeTurn((*doc)["id"].as<int>());
@@ -46,6 +50,7 @@ String Pool::accept(String json)
         (*jsonResult)["board"][i] = game.board[i];
     }
 
+    (*jsonResult)["gameMode"] = game.gameMode;
     (*jsonResult)["status"] = status;
     (*jsonResult)["turn"] = game.turn;
     (*jsonResult)["isEnded"] = game.isEnded;
