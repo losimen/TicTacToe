@@ -1,20 +1,31 @@
 <template>
-  <header>
-    <h1>TIC-TAC-TOE</h1>
-  </header>
+  <div class="app-game">
+    <header>
+      <h1>TIC-TAC-TOE</h1>
+    </header>
 
-  <LoadingSpinner v-if="isLoading"/>
-  <div v-else>
-    <TurnIndicator v-show="!isEnded" :turnNum="turn"/>
-    <WinIndicator v-show="isEnded" :turnNum="turn" :isTie="isTie"/>
+    <LoadingSpinner v-if="isLoading"/>
+    <div v-else>
+      <TurnIndicator v-show="!isEnded" :turnNum="turn"/>
+      <WinIndicator v-show="isEnded" :turnNum="turn" :isTie="isTie"/>
 
-    <div class="cont-slot">
-      <MarkSlot v-for="slotID in 9" :key="slotID - 1" @click="onMarkSlotClick(slotID - 1)" :turnNum="board[slotID - 1]"/>
+      <div class="cont-slot">
+        <MarkSlot v-for="slotID in 9" :key="slotID - 1" @click="onMarkSlotClick(slotID - 1)" :turnNum="board[slotID - 1]"/>
+      </div>
+
+      <button id="btn-reset" @click="onResetBoard">Reset</button>
+
+      <div class="custom-select" style="width:200px;">
+        <label for="game-mode">Game Mode: </label>
+        <select @change="onGameModeChange" v-model="gameMode">
+          <option value="0"> Man vs Man </option>
+          <option value="1"> Man vs AI </option>
+          <option value="2"> AI vs AI</option>
+        </select>
+      </div>
     </div>
 
-    <button id="btn-reset" @click="onResetBoard">Reset</button>
   </div>
-<!--  <button id="btn-reset" @click="showToast">Check</button>-->
 </template>
 
 
@@ -32,6 +43,12 @@ function onResetBoard() {
   arduinoIO.onSendData('reset-board')
 }
 
+function onGameModeChange() {
+  this.gameMode = Number(this.gameMode)
+  console.log(typeof this.gameMode, this.gameMode)
+  arduinoIO.onSendData('change-game-mode', {mode: this.gameMode})
+}
+
 // function onCheck() {
 //   arduinoIO.onSendData('check-baby')
 // }
@@ -41,7 +58,7 @@ function onMarkSlotClick(id) {
 }
 
 let port = new SerialPort({
-  path: '/dev/tty.usbserial-140',
+  path: '/dev/tty.usbserial-1140',
   baudRate: 38400,
 })
 
@@ -61,7 +78,8 @@ export default {
     // onCheck,
     showError(message) {
       this.toast.error(message)
-    }
+    },
+    onGameModeChange
   },
   setup() {
     const toast = useToast();
@@ -75,13 +93,13 @@ export default {
       isEnded: false,
       isTie: false,
       isLoading: true,
+      gameMode: 0
     }
   },
   mounted() {
     port.on('data', (data) => {
       arduinoIO.processData(data)
     })
-
 
     arduinoIO.setApp(this)
     arduinoIO.setPort(port)
@@ -138,7 +156,7 @@ button {
   margin: 0.2em;
 }
 
-#app {
+.app-game {
   color: var(--clr-fg);
   display: flex;
   flex-direction: column;

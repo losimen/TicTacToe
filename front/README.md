@@ -10,5 +10,6 @@
 `yarn e-start`
 
 ## TODO:
-- [ ] add writing to file
 - [ ] add AI
+- [ ] add tests
+- [ ] add ci/cd

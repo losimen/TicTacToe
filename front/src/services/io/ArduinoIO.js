@@ -12,6 +12,9 @@ export default class ArduinoIO {
   }
 
   updateGameData(dataObj) {
+    console.log(dataObj)
+
+    this.app.gameMode = dataObj.gameMode
     this.app.board = dataObj.board
     this.app.turn = dataObj.turn
     this.app.isEnded = dataObj.isEnded
