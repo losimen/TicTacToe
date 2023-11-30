@@ -26,22 +26,44 @@ void Game::restoreBoard(int board[9], bool isEnded, bool isTie)
     this->isTie = isTie;
 }
 
-
-String Game::makeTurn(int id)
+String Game::makeAITurn()
 {
   if (isEnded)
   {
     return "error: game is ended";
   }
 
-  if (board[id] != -1)
+  int mark = turn % 2;
+  int bestScore = -1000;
+  int bestMove = -1;
+
+  for (int i = 0; i < 9; i++)
   {
-    return "error: invalid move";
+    if (board[i] == -1)
+    {
+      board[i] = mark;
+      // int score = minimax(board, 0, false);
+      int score = 0;
+      board[i] = -1;
+
+      if (score > bestScore)
+      {
+        bestScore = score;
+        bestMove = i;
+      }
+    }
   }
 
-  int mark = turn % 2;
-  board[id] = mark;
+  board[bestMove] = mark;
 
+  checkWin(mark);
+
+  return "success";
+}
+
+
+void Game::checkWin(int mark)
+{
   for (int i = 0; i < 3; i++)
   {
     if (
@@ -73,6 +95,25 @@ String Game::makeTurn(int id)
   {
     turn += 1;
   }
+}
+
+
+String Game::makeHumanTurn(int id)
+{
+  if (isEnded)
+  {
+    return "error: game is ended";
+  }
+
+  if (board[id] != -1)
+  {
+    return "error: invalid move";
+  }
+
+  int mark = turn % 2;
+  board[id] = mark;
+
+  checkWin(mark);
 
   return "success";
 }

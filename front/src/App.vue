@@ -45,7 +45,6 @@ function onResetBoard() {
 
 function onGameModeChange() {
   this.gameMode = Number(this.gameMode)
-  console.log(typeof this.gameMode, this.gameMode)
   arduinoIO.onSendData('change-game-mode', {mode: this.gameMode})
 }
 

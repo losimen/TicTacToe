@@ -29,7 +29,7 @@ String Pool::accept(String json)
     }
     else if (action == "mark-slot")
     {
-        status = game.makeTurn((*doc)["id"].as<int>());
+        status = game.makeHumanTurn((*doc)["id"].as<int>());
     }
     else if (action == "synchronize")
     {
