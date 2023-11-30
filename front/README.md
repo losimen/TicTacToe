@@ -10,6 +10,6 @@
 `yarn e-start`
 
 ## TODO:
-- [ ] add AI
+- [ ] add clever (minimax) AI
 - [ ] add tests
 - [ ] add ci/cd
