@@ -28,105 +28,90 @@ void Game::restoreBoard(int board[9], bool isEnded, bool isTie)
 }
 
 
-int Game::minimax(bool isMaximizing)
-{
-    int score;
-
-    if (checkWin(1))
-    {
-        score = 1;
-    }
-    else if (checkWin(0))
-    {
-        score = -1;
-    }
-    else if (turn >= 8)
-    {
-        score = 0;
-    }
-    else
-    {
-        int bestScore = isMaximizing ? INT_MIN : INT_MAX;
-
-        for (int i = 0; i < 9; i++)
-        {
-            if (boardCopy[i] == -1)
-            {
-                boardCopy[i] = isMaximizing ? 1 : 0;
-                turn++;
-
-                int currentScore = minimax(!isMaximizing);
-
-                boardCopy[i] = -1;
-                turn--;
-
-                if ((isMaximizing && currentScore > bestScore) || (!isMaximizing && currentScore < bestScore))
-                {
-                    bestScore = currentScore;
-                }
-            }
-        }
-
-        score = bestScore;
-    }
-
-    return score;
-}
-
-int Game::findBestMove()
-{
-    int bestMove = -1;
-    int bestScore = INT_MIN;
-
+int Game::minimax(int depth, bool isMaximizingPlayer)
+{ 
+    int amountOfMoves = 0;
     for (int i = 0; i < 9; i++)
     {
-        if (boardCopy[i] == -1)
+        if (board[1] == -1)
         {
-            boardCopy[i] = 1;
-            turn++;
-
-            int currentScore = minimax(false);
-
-            boardCopy[i] = -1;
-            turn--;
-
-            if (currentScore > bestScore)
-            {
-                bestScore = currentScore;
-                bestMove = i;
-            }
+            amountOfMoves += 1;
         }
     }
 
-    return bestMove;
-}
+    if (checkWin(aiMark)) {
+        return -1;
+    } else if (checkWin(aiMark)) {
+        return 1; 
+    } else if (amountOfMoves == 0) {
+        return 0;
+    }
 
+    int bestScore = isMaximizingPlayer ? INT_MIN : INT_MAX;
+
+    for (int i = 0; i < 9; ++i) {
+      if (board[i] != -1)
+      {
+        continue;
+      }
+
+      board[i] = depth % 2;
+      int score = minimax(depth + 1, !isMaximizingPlayer);
+      board[i] = -1; 
+
+      if (isMaximizingPlayer) 
+      {
+        if (score > bestScore) 
+        {
+          bestScore = score;
+          moveToMake = i;
+        }
+      } 
+      else 
+      {
+        if (score < bestScore) 
+        {
+          bestScore = score;
+          moveToMake = i;
+        }
+      }
+  }
+
+  return bestScore;
+}
 
 String Game::makeAITurn()
 {
-    if (isEnded)
-    {
+    if (isEnded) {
         return "error: game is ended";
     }
 
-    for (int i = 0; i < 9; i++)
-    {
-        boardCopy[i] = board[i];
+    int bestScore = INT_MIN;
+    aiMark = turn % 2;
+
+    for (int i = 0; i < 9; ++i) {
+      if (board[i] != -1)
+      {
+        continue;
+      }
+
+      board[i] = aiMark;
+      moveToMake = i;
+      int score = minimax(turn, false);
+      board[i] = -1; 
+
+      if (score > bestScore) 
+      {
+        // bestScore = score;
+        // moveToMake = i;
+      }
     }
 
-    // Find the best move using Minimax
-    int bestMove = findBestMove();
-
-    // Make the AI move
-    int mark = turn % 2;
-    board[bestMove] = mark;
-
-    // Check if the game has ended
-    determineGameEnd(mark);
+    board[moveToMake] = aiMark;
+    determineGameEnd(turn % 2);
 
     return "success";
 }
-
 
 
 bool Game::checkWin(int mark)

@@ -12,13 +12,16 @@ class Game
 protected:
     void determineGameEnd(int mark);
     bool checkWin(int mark);
-    int minimax(bool isMaximizing);
-    int findBestMove();
+    int minimax(int depth, bool isMaximizingPlayer);
 
 public:
     int board[9] = {-1, -1, -1, -1, -1, -1, -1, -1, -1};
-    int boardCopy[9] = {-1, -1, -1, -1, -1, -1, -1, -1, -1};
+    // int boardCopy[9] = {-1, -1, -1, -1, -1, -1, -1, -1, -1};
+    
     int turn = 0;
+    int aiMark = 0;
+    int moveToMake = 0;
+
     bool isEnded = false;
     bool isTie = false;
 
