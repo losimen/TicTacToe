@@ -13,3 +13,4 @@
 - [ ] add clever (minimax) AI
 - [ ] add tests
 - [ ] add ci/cd
+- [ ] add infinite board
