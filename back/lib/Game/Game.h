@@ -10,6 +10,7 @@ public:
     bool isTie = false;
 
     String resetBoard();
+    void restoreBoard(int board[9], bool isEnded, bool isTie);
 
     String makeTurn(int id);
 };

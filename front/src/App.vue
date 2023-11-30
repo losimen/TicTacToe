@@ -41,7 +41,7 @@ function onMarkSlotClick(id) {
 }
 
 let port = new SerialPort({
-  path: '/dev/tty.usbserial-1140',
+  path: '/dev/tty.usbserial-140',
   baudRate: 38400,
 })
 
@@ -82,13 +82,14 @@ export default {
       arduinoIO.processData(data)
     })
 
-    setTimeout(() => {
-      this.isLoading = false
-    }, 2000)
-
 
     arduinoIO.setApp(this)
     arduinoIO.setPort(port)
+
+    setTimeout(() => {
+      arduinoIO.onSendData('synchronize')
+      this.isLoading = false
+    }, 2000)
   }
 }
 </script>

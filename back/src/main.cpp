@@ -10,7 +10,8 @@ void setup()
   Serial.setTimeout(50);
 }
 
-void loop() {
+void loop() 
+{
 
   if (Serial.available() > 0) 
   {

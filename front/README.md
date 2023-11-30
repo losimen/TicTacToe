@@ -10,6 +10,5 @@
 `yarn e-start`
 
 ## TODO:
-- [ ] add AI
-- [ ] add loading screen
 - [ ] add writing to file
+- [ ] add AI

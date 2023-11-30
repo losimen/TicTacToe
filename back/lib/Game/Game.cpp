@@ -15,6 +15,18 @@ String Game::resetBoard()
 }
 
 
+void Game::restoreBoard(int board[9], bool isEnded, bool isTie)
+{
+    for (int i = 0; i < 9; i++)
+    {
+        this->board[i] = board[i];
+    }
+
+    this->isEnded = isEnded;
+    this->isTie = isTie;
+}
+
+
 String Game::makeTurn(int id)
 {
   if (isEnded)

@@ -2,6 +2,16 @@
 
 #include "Pool.h"
 
+void Pool::restoreFromStorage()
+{
+    int board[9];
+    bool isEnded;
+    bool isTie;
+
+    storage.readBoard(board, isEnded, isTie);
+    game.restoreBoard(board, isEnded, isTie);
+}
+
 String Pool::accept(String json)
 {
     DynamicJsonDocument *doc = new DynamicJsonDocument(700);
@@ -16,6 +26,11 @@ String Pool::accept(String json)
     else if (action == "mark-slot")
     {
         status = game.makeTurn((*doc)["id"].as<int>());
+    }
+    else if (action == "synchronize")
+    {
+        restoreFromStorage();
+        status = "success";
     }
     else
     {
@@ -35,6 +50,8 @@ String Pool::accept(String json)
     (*jsonResult)["turn"] = game.turn;
     (*jsonResult)["isEnded"] = game.isEnded;
     (*jsonResult)["isTie"] = game.isTie;
+
+    storage.writeBoard(game.board, game.isEnded, game.isTie);
 
     String stringResult;
     serializeJson((*jsonResult), stringResult);
