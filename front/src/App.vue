@@ -59,8 +59,6 @@ function onMarkSlotClick(id) {
 
 function updateGameData(dataObj)
 {
-  console.log(dataObj)
-
   this.gameMode = dataObj.gameMode
   this.board = dataObj.board
   this.turn = dataObj.turn
@@ -88,7 +86,7 @@ function updateGameData(dataObj)
 }
 
 let port = new SerialPort({
-  path: '/dev/tty.usbserial-140',
+  path: '/dev/tty.usbserial-1140',
   baudRate: 38400,
 })
 

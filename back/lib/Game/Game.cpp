@@ -30,7 +30,7 @@ void Game::restoreBoard(int board[9], bool isEnded, bool isTie)
 
 int Game::minimax(int depth, bool isMaximizingPlayer)
 { 
-    int bestScore = isMaximizingPlayer ? INT_MIN : INT_MAX;
+    int bestScore = isMaximizingPlayer ? -100 : 100;
 
     if (checkWin(aiMark))
     {
@@ -82,7 +82,15 @@ String Game::makeAITurn()
     }
 
     aiMark = turn % 2;
-    minimax(turn, true);
+
+    if (board[4] == -1)
+    {
+      moveToMake = 4;
+    }
+    else
+    {
+      minimax(turn, true);
+    }
 
     board[moveToMake] = aiMark;
     determineGameEnd(aiMark);

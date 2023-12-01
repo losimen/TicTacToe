@@ -16,7 +16,6 @@ protected:
 
 public:
     int board[9] = {-1, -1, -1, -1, -1, -1, -1, -1, -1};
-    // int boardCopy[9] = {-1, -1, -1, -1, -1, -1, -1, -1, -1};
     
     int turn = 0;
     int aiMark = 0;

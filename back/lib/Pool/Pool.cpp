@@ -18,33 +18,40 @@ String Pool::accept(String json)
     if (action == "reset-board")
     {
         status = game.resetBoard();
+        delete doc;
     }
     else if (action == "change-game-mode")
     {
-        game.gameMode = (GameMode)(*doc)["gameMode"].as<int>();
+        const GameMode gameMode = (GameMode)(*doc)["gameMode"].as<int>();
+        delete doc;
+        game.gameMode = gameMode;
         status = "success";
     }
     else if (action == "ai-move")
     {
         status = game.makeAITurn();
+        delete doc;
     }
     
     else if (action == "mark-slot")
     {
-        status = game.makeHumanTurn((*doc)["id"].as<int>());
+        const int id = (*doc)["id"].as<int>();
+        delete doc;
+        status = game.makeHumanTurn(id);
     }
     else if (action == "synchronize")
     {
         restoreFromStorage();
+        delete doc;
         status = "success";
     }
     else
     {
+        delete doc;
         // {"action": "hi"}
         // Serial.println("Invalid action");
     }
 
-    delete doc;
     DynamicJsonDocument *jsonResult = new DynamicJsonDocument(700);
 
     for (int i = 0; i < 9; i++)
