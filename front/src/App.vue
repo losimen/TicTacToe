@@ -53,6 +53,7 @@ function onGameModeChange() {
 // }
 
 function onMarkSlotClick(id) {
+  console.log(id)
   arduinoIO.onSendData('mark-slot', {id: id})
 }
 
@@ -87,7 +88,7 @@ function updateGameData(dataObj)
 }
 
 let port = new SerialPort({
-  path: '/dev/tty.usbserial-1140',
+  path: '/dev/tty.usbserial-140',
   baudRate: 38400,
 })
 

@@ -30,24 +30,19 @@ void Game::restoreBoard(int board[9], bool isEnded, bool isTie)
 
 int Game::minimax(int depth, bool isMaximizingPlayer)
 { 
-    int amountOfMoves = 0;
-    for (int i = 0; i < 9; i++)
-    {
-        if (board[1] == -1)
-        {
-            amountOfMoves += 1;
-        }
-    }
-
-    if (checkWin(aiMark)) {
-        return -1;
-    } else if (checkWin(aiMark)) {
-        return 1; 
-    } else if (amountOfMoves == 0) {
-        return 0;
-    }
-
     int bestScore = isMaximizingPlayer ? INT_MIN : INT_MAX;
+
+    if (checkWin(aiMark))
+    {
+      return 1; 
+    } 
+    else if (checkWin((aiMark + 1) % 2))
+    {
+      return -1;
+    } else if (depth >= 8) 
+    {
+      return 0;
+    }
 
     for (int i = 0; i < 9; ++i) {
       if (board[i] != -1)
@@ -86,29 +81,11 @@ String Game::makeAITurn()
         return "error: game is ended";
     }
 
-    int bestScore = INT_MIN;
     aiMark = turn % 2;
-
-    for (int i = 0; i < 9; ++i) {
-      if (board[i] != -1)
-      {
-        continue;
-      }
-
-      board[i] = aiMark;
-      moveToMake = i;
-      int score = minimax(turn, false);
-      board[i] = -1; 
-
-      if (score > bestScore) 
-      {
-        // bestScore = score;
-        // moveToMake = i;
-      }
-    }
+    minimax(turn, true);
 
     board[moveToMake] = aiMark;
-    determineGameEnd(turn % 2);
+    determineGameEnd(aiMark);
 
     return "success";
 }
