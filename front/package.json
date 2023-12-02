@@ -4,6 +4,7 @@
   "main": "dist-electron/main/index.js",
   "description": "Really simple Electron + Vue + Vite boilerplate.",
   "author": "草鞋没号 <308487730@qq.com>",
+  "repository": "git@gitintsrv.domain.com/UserName/RepoName",
   "license": "MIT",
   "private": true,
   "keywords": [
