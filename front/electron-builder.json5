@@ -15,7 +15,8 @@
   ],
   "mac": {
     "target": [
-      "dmg"
+      "dmg",
+      "pkg"
     ],
     "artifactName": "${productName}-Mac-${version}-Installer.${ext}",
     "publish": {
