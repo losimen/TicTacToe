@@ -14,15 +14,6 @@
     "vue3",
     "vue"
   ],
-  "build": {
-    "publish": [{
-      "provider": "github",
-      "owner": "losimen",
-      "repo": "csdt2024ki47kovalpp09",
-      "private": true,
-      "token": "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"
-    }]
-  },
   "debug": {
     "env": {
       "VITE_DEV_SERVER_URL": "http://127.0.0.1:3344/"
