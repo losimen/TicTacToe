@@ -19,8 +19,8 @@ jobs:
           python -m pip install --upgrade pip
           pip install platformio
       - name: Move to HW directory
-        run: cd back
-      # It is important to first install the libraries before compiling, since otherwise compilation might fail to find the just-installed libraries
+        run: cd Release\ HW
+        working-directory: ${{ github.workspace }}
       - name: Install platformIO libraries
         run: pio lib install
       - name: Run PlatformIO
