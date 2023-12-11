@@ -94,10 +94,6 @@ function onGameModeChange() {
   arduinoIO.onSendData('change-game-mode', {gameMode: this.gameMode})
 }
 
-// function onCheck() {
-//   arduinoIO.onSendData('check-baby')
-// }
-
 function onMarkSlotClick(id) {
   console.log(id)
   arduinoIO.onSendData('mark-slot', {id: id})
