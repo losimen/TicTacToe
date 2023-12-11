@@ -23,3 +23,8 @@ jobs:
       - name: Run PlatformIO
         working-directory: ./back
         run: platformio run
+      - name: Upload artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: hw-hex
+          path: ./back/.pio/build/uno/firmware.hex
