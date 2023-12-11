@@ -19,7 +19,7 @@ jobs:
           python -m pip install --upgrade pip
           pip install platformio
       - name: Install platformIO libraries
-        working-directory: ./back
         run: pio lib install
       - name: Run PlatformIO
+        working-directory: ./back
         run: platformio run
