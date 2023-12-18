@@ -22,9 +22,7 @@
     "publish": {
       "provider": "github",
       "owner": "losimen",
-      "repo": "csdt2024ki47kovalpp09",
-      "private": true,
-      "token": "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"
+      "repo": "csdt2024ki47kovalpp09"
     }
   },
   "win": {
@@ -40,9 +38,7 @@
     "publish": {
       "provider": "github",
       "owner": "losimen",
-      "repo": "csdt2024ki47kovalpp09",
-      "private": true,
-      "token": "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"
+      "repo": "csdt2024ki47kovalpp09"
     }
   },
   "nsis": {
