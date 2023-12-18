@@ -1,20 +1,16 @@
-# csdt2024ki47kovalpp09
+# Tic Tac Toe on Arduino 
 
-## Details about repo
-Repo for discipline “Computer systems automated design”. 
-
-## Task details
-Simple game with the following play modes:
-- Man vs AI
-- Man vs Man
-- AI vs AI
+## Description
 Architecture design - MVC. 
-The server part executes on HW(microcontroller) and SW(Man Desktop) 
-Possibility to manage game configuration and saving game state.
+The server part executes on HW(microcontroller) and SW(Man Desktop). 
+SW is just renderer of HW data.
 
-## Student number and details from Table 1. Tasks by students
-Number 9, tic-tac-toe game (unlimited board).
+## Game modes
+- Man vs AI (minimax)
+- Man vs Man
+- AI (minimax) vs AI (minimax)
 
-## Add details about technology, program language, and HW that will be used in next tasks.
-- HW Arduino Uno
-- Possibly QT C++ 
+## Frameworks
+- Electron
+- Vue JS + Vite
+- Platform IO
