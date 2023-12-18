@@ -33,11 +33,57 @@
 import MarkSlot from "./components/MarkSlot.vue";
 import TurnIndicator from "./components/TurnIndicator.vue";
 import WinIndicator from "./components/WinIndicator.vue";
-const { SerialPort } = require('serialport')
-import ArduinoIO from './services/io/ArduinoIO'
-
+import { SerialPort } from 'serialport'
 import { useToast } from "vue-toastification";
 import LoadingSpinner from "./components/LoadingSpinner.vue";
+
+class ArduinoIO {
+  hasEndSymbol(data) {
+    return data.includes('^');
+  }
+
+  handleData() {
+    this.accumulatedData = this.accumulatedData.slice(0, this.accumulatedData.lastIndexOf('}') + 1)
+    const dataObj = JSON.parse(this.accumulatedData)
+    this.accumulatedData = ''
+
+    this.updateGameData(dataObj);
+  }
+
+  updateGameData(dataObj) {
+    this.app.updateGameData(dataObj)
+  }
+
+  processData(newData) {
+    if (this.accumulatedData === undefined) {
+      this.accumulatedData = '';
+    }
+    this.accumulatedData += newData;
+
+    if (this.hasEndSymbol(this.accumulatedData)) {
+      this.handleData();
+    }
+  }
+
+  setApp(app) {
+    this.app = app
+  }
+
+  setPort(port) {
+    this.port = port
+  }
+
+  onSendData(action, args) {
+    const data = {
+      action: action,
+    }
+
+    Object.assign(data, args)
+    const dataString = JSON.stringify(data)
+
+    this.port.write(dataString)
+  }
+}
 
 function onResetBoard() {
   arduinoIO.onSendData('reset-board')
@@ -47,10 +93,6 @@ function onGameModeChange() {
   this.gameMode = Number(this.gameMode)
   arduinoIO.onSendData('change-game-mode', {gameMode: this.gameMode})
 }
-
-// function onCheck() {
-//   arduinoIO.onSendData('check-baby')
-// }
 
 function onMarkSlotClick(id) {
   console.log(id)
@@ -207,5 +249,3 @@ button {
   margin-bottom: 1em;
 }
 </style>
-
-
