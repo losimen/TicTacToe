@@ -1,4 +1,4 @@
-# Tic Tac Toe on Arduino 
+# Tic Tac Toe on Arduino as HW
 
 ## Description
 Architecture design - MVC. 
